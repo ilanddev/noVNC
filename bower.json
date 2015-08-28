@@ -1,0 +1,20 @@
+{
+  "name": "novnc-vmware-vcd",
+  "description": "Version of noVNC that is compatible with the vCloud Director VM console.",
+  "main": [
+    "include/util.js"
+  ],
+  "moduleType": [
+    "globals"
+  ],
+  "keywords": [
+    "vCloudDirector",
+    "VMware",
+    "console",
+    "vnc"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/ilanddev/noVNC.git"
+  }
+}
