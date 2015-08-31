@@ -2,6 +2,7 @@
   "name": "novnc-vmware-vcd",
   "description": "Version of noVNC that is compatible with the vCloud Director VM console.",
   "main": [
+    "include/util.js",
     "include/webutil.js",
     "include/base64.js",
     "include/des.js",
