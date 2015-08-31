@@ -13,7 +13,8 @@
     "include/display.js",
     "include/jsunzip.js",
     "include/rfb.js",
-    "include/keysym.js"
+    "include/keysym.js",
+    "include/ui.js"
   ],
   "moduleType": [
     "globals"
