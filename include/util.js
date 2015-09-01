@@ -12,29 +12,28 @@
 // Globals defined here
 var Util = {};
 
-
 /*
  * Make arrays quack
  */
 
-var addFunc = function (cl, name, func) {
+var addFunc = function(cl, name, func) {
     if (!cl.prototype[name]) {
         Object.defineProperty(cl.prototype, name, { enumerable: false, value: func });
     }
 };
 
-addFunc(Array, 'push8', function (num) {
+addFunc(Array, 'push8', function(num) {
     "use strict";
     this.push(num & 0xFF);
 });
 
-addFunc(Array, 'push16', function (num) {
+addFunc(Array, 'push16', function(num) {
     "use strict";
     this.push((num >> 8) & 0xFF,
               num & 0xFF);
 });
 
-addFunc(Array, 'push32', function (num) {
+addFunc(Array, 'push32', function(num) {
     "use strict";
     this.push((num >> 24) & 0xFF,
               (num >> 16) & 0xFF,
@@ -46,7 +45,7 @@ addFunc(Array, 'push32', function (num) {
 //This prototype is provided by the Mozilla foundation and
 //is distributed under the MIT license.
 //http://www.ibiblio.org/pub/Linux/LICENSES/mit.license
-addFunc(Array, 'map', function (fun /*, thisp*/) {
+addFunc(Array, 'map', function(fun /*, thisp*/) {
     "use strict";
     var len = this.length;
     if (typeof fun != "function") {
@@ -68,7 +67,7 @@ addFunc(Array, 'map', function (fun /*, thisp*/) {
 //This prototype is provided by the Mozilla foundation and
 //is distributed under the MIT license.
 //http://www.ibiblio.org/pub/Linux/LICENSES/mit.license
-addFunc(Array, 'indexOf', function (elt /*, from*/) {
+addFunc(Array, 'indexOf', function(elt /*, from*/) {
     "use strict";
     var len = this.length >>> 0;
 
@@ -89,7 +88,7 @@ addFunc(Array, 'indexOf', function (elt /*, from*/) {
 
 // From https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/keys
 if (!Object.keys) {
-    Object.keys = (function () {
+    Object.keys = (function() {
         'use strict';
         var hasOwnProperty = Object.prototype.hasOwnProperty,
             hasDontEnumBug = !({toString: null}).propertyIsEnumerable('toString'),
@@ -104,7 +103,7 @@ if (!Object.keys) {
             ],
             dontEnumsLength = dontEnums.length;
 
-        return function (obj) {
+        return function(obj) {
             if (typeof obj !== 'object' && (typeof obj !== 'function' || obj === null)) {
                 throw new TypeError('Object.keys called on non-object');
             }
@@ -134,7 +133,7 @@ if (!Object.keys) {
 //This prototype is provided by the Mozilla foundation and
 //is distributed under the MIT license.
 //http://www.ibiblio.org/pub/Linux/LICENSES/mit.license
-addFunc(Function, 'bind', function (oThis) {
+addFunc(Function, 'bind', function(oThis) {
     if (typeof this !== "function") {
         // closest thing possible to the ECMAScript 5
         // internal IsCallable function
@@ -144,8 +143,8 @@ addFunc(Function, 'bind', function (oThis) {
 
     var aArgs = Array.prototype.slice.call(arguments, 1),
             fToBind = this,
-            fNOP = function () {},
-            fBound = function () {
+            fNOP = function() {},
+            fBound = function() {
                 return fToBind.apply(this instanceof fNOP && oThis ? this
                                                                    : oThis,
                                      aArgs.concat(Array.prototype.slice.call(arguments)));
@@ -161,14 +160,14 @@ addFunc(Function, 'bind', function (oThis) {
 // requestAnimationFrame shim with setTimeout fallback
 //
 
-window.requestAnimFrame = (function () {
+window.requestAnimFrame = (function() {
     "use strict";
-    return  window.requestAnimationFrame       ||
+    return window.requestAnimationFrame       ||
             window.webkitRequestAnimationFrame ||
             window.mozRequestAnimationFrame    ||
             window.oRequestAnimationFrame      ||
             window.msRequestAnimationFrame     ||
-            function (callback) {
+            function(callback) {
                 window.setTimeout(callback, 1000 / 60);
             };
 })();
@@ -184,7 +183,7 @@ window.requestAnimFrame = (function () {
  */
 
 Util._log_level = 'warn';
-Util.init_logging = function (level) {
+Util.init_logging = function(level) {
     "use strict";
     if (typeof level === 'undefined') {
         level = Util._log_level;
@@ -200,24 +199,24 @@ Util.init_logging = function (level) {
             };
         } else {
             window.console = {
-                'log'  : function (m) {},
-                'warn' : function (m) {},
-                'error': function (m) {}
+                'log'  : function(m) {},
+                'warn' : function(m) {},
+                'error': function(m) {}
             };
         }
     }
 
-    Util.Debug = Util.Info = Util.Warn = Util.Error = function (msg) {};
+    Util.Debug = Util.Info = Util.Warn = Util.Error = function(msg) {};
     /* jshint -W086 */
     switch (level) {
         case 'debug':
-            Util.Debug = function (msg) { console.log(msg); };
+            Util.Debug = function(msg) { console.log(msg); };
         case 'info':
-            Util.Info  = function (msg) { console.log(msg); };
+            Util.Info  = function(msg) { console.log(msg); };
         case 'warn':
-            Util.Warn  = function (msg) { console.warn(msg); };
+            Util.Warn  = function(msg) { console.warn(msg); };
         case 'error':
-            Util.Error = function (msg) { console.error(msg); };
+            Util.Error = function(msg) { console.error(msg); };
         case 'none':
             break;
         default:
@@ -225,18 +224,18 @@ Util.init_logging = function (level) {
     }
     /* jshint +W086 */
 };
-Util.get_logging = function () {
+Util.get_logging = function() {
     return Util._log_level;
 };
 // Initialize logging level
 Util.init_logging();
 
-Util.make_property = function (proto, name, mode, type) {
+Util.make_property = function(proto, name, mode, type) {
     "use strict";
 
     var getter;
     if (type === 'arr') {
-        getter = function (idx) {
+        getter = function(idx) {
             if (typeof idx !== 'undefined') {
                 return this['_' + name][idx];
             } else {
@@ -244,14 +243,14 @@ Util.make_property = function (proto, name, mode, type) {
             }
         };
     } else {
-        getter = function () {
+        getter = function() {
             return this['_' + name];
         };
     }
 
-    var make_setter = function (process_val) {
+    var make_setter = function(process_val) {
         if (process_val) {
-            return function (val, idx) {
+            return function(val, idx) {
                 if (typeof idx !== 'undefined') {
                     this['_' + name][idx] = process_val(val);
                 } else {
@@ -259,7 +258,7 @@ Util.make_property = function (proto, name, mode, type) {
                 }
             };
         } else {
-            return function (val, idx) {
+            return function(val, idx) {
                 if (typeof idx !== 'undefined') {
                     this['_' + name][idx] = val;
                 } else {
@@ -271,7 +270,7 @@ Util.make_property = function (proto, name, mode, type) {
 
     var setter;
     if (type === 'bool') {
-        setter = make_setter(function (val) {
+        setter = make_setter(function(val) {
             if (!val || (val in {'0': 1, 'no': 1, 'false': 1})) {
                 return false;
             } else {
@@ -279,15 +278,15 @@ Util.make_property = function (proto, name, mode, type) {
             }
         });
     } else if (type === 'int') {
-        setter = make_setter(function (val) { return parseInt(val, 10); });
+        setter = make_setter(function(val) { return parseInt(val, 10); });
     } else if (type === 'float') {
         setter = make_setter(parseFloat);
     } else if (type === 'str') {
         setter = make_setter(String);
     } else if (type === 'func') {
-        setter = make_setter(function (val) {
+        setter = make_setter(function(val) {
             if (!val) {
-                return function () {};
+                return function() {};
             } else {
                 return val;
             }
@@ -308,7 +307,7 @@ Util.make_property = function (proto, name, mode, type) {
         if (mode === 'rw') {
             proto['set_' + name] = setter;
         } else if (mode === 'wo') {
-            proto['set_' + name] = function (val, idx) {
+            proto['set_' + name] = function(val, idx) {
                 if (typeof this['_' + name] !== 'undefined') {
                     throw new Error(name + " can only be set once");
                 }
@@ -318,20 +317,20 @@ Util.make_property = function (proto, name, mode, type) {
     }
 
     // make a special setter that we can use in set defaults
-    proto['_raw_set_' + name] = function (val, idx) {
+    proto['_raw_set_' + name] = function(val, idx) {
         setter.call(this, val, idx);
         //delete this['_init_set_' + name];  // remove it after use
     };
 };
 
-Util.make_properties = function (constructor, arr) {
+Util.make_properties = function(constructor, arr) {
     "use strict";
     for (var i = 0; i < arr.length; i++) {
         Util.make_property(constructor.prototype, arr[i][0], arr[i][1], arr[i][2]);
     }
 };
 
-Util.set_defaults = function (obj, conf, defaults) {
+Util.set_defaults = function(obj, conf, defaults) {
     var defaults_keys = Object.keys(defaults);
     var conf_keys = Object.keys(conf);
     var keys_obj = {};
@@ -358,17 +357,14 @@ Util.set_defaults = function (obj, conf, defaults) {
 /*
  * Decode from UTF-8
  */
-Util.decodeUTF8 = function (utf8string) {
+Util.decodeUTF8 = function(utf8string) {
     "use strict";
     return decodeURIComponent(escape(utf8string));
 };
 
-
-
 /*
  * Cross-browser routines
  */
-
 
 // Dynamically load scripts without using document.write()
 // Reference: http://unixpapa.com/js/dyna.html
@@ -376,17 +372,17 @@ Util.decodeUTF8 = function (utf8string) {
 // Handles the case where load_scripts is invoked from a script that
 // itself is loaded via load_scripts. Once all scripts are loaded the
 // window.onscriptsloaded handler is called (if set).
-Util.get_include_uri = function () {
+Util.get_include_uri = function() {
     return (typeof INCLUDE_URI !== "undefined") ? INCLUDE_URI : "include/";
 };
 Util._loading_scripts = [];
 Util._pending_scripts = [];
-Util.load_scripts = function (files) {
+Util.load_scripts = function(files) {
     "use strict";
     var head = document.getElementsByTagName('head')[0], script,
         ls = Util._loading_scripts, ps = Util._pending_scripts;
 
-    var loadFunc = function (e) {
+    var loadFunc = function(e) {
         while (ls.length > 0 && (ls[0].readyState === 'loaded' ||
                                  ls[0].readyState === 'complete')) {
             // For IE, append the script to trigger execution
@@ -432,77 +428,15 @@ Util.load_scripts = function (files) {
     }
 };
 
-
-// Get DOM element position on page
-//  This solution is based based on http://www.greywyvern.com/?post=331
-//  Thanks to Brian Huisman AKA GreyWyvern!
-Util.getPosition = (function () {
-    "use strict";
-    function getStyle(obj, styleProp) {
-        var y;
-        if (obj.currentStyle) {
-            y = obj.currentStyle[styleProp];
-        } else if (window.getComputedStyle)
-            y = window.getComputedStyle(obj, null)[styleProp];
-        return y;
-    }
-
-    function scrollDist() {
-        var myScrollTop = 0, myScrollLeft = 0;
-        var html = document.getElementsByTagName('html')[0];
-
-        // get the scrollTop part
-        if (html.scrollTop && document.documentElement.scrollTop) {
-            myScrollTop = html.scrollTop;
-        } else if (html.scrollTop || document.documentElement.scrollTop) {
-            myScrollTop = html.scrollTop + document.documentElement.scrollTop;
-        } else if (document.body.scrollTop) {
-            myScrollTop = document.body.scrollTop;
-        } else {
-            myScrollTop = 0;
-        }
-
-        // get the scrollLeft part
-        if (html.scrollLeft && document.documentElement.scrollLeft) {
-            myScrollLeft = html.scrollLeft;
-        } else if (html.scrollLeft || document.documentElement.scrollLeft) {
-            myScrollLeft = html.scrollLeft + document.documentElement.scrollLeft;
-        } else if (document.body.scrollLeft) {
-            myScrollLeft = document.body.scrollLeft;
-        } else {
-            myScrollLeft = 0;
-        }
-
-        return [myScrollLeft, myScrollTop];
-    }
-
-    return function (obj) {
-        var curleft = 0, curtop = 0, scr = obj, fixed = false;
-        while ((scr = scr.parentNode) && scr != document.body) {
-            curleft -= scr.scrollLeft || 0;
-            curtop -= scr.scrollTop || 0;
-            if (getStyle(scr, "position") == "fixed") {
-                fixed = true;
-            }
-        }
-        if (fixed && !window.opera) {
-            var scrDist = scrollDist();
-            curleft += scrDist[0];
-            curtop += scrDist[1];
-        }
-
-        do {
-            curleft += obj.offsetLeft;
-            curtop += obj.offsetTop;
-        } while ((obj = obj.offsetParent));
-
-        return {'x': curleft, 'y': curtop};
-    };
-})();
-
+Util.getPosition = function(obj) {
+    'use strict';
+    var objPosition = obj.getBoundingClientRect();
+    return {'x': objPosition.left + window.pageXOffset, 'y': objPosition.top + window.pageYOffset,
+            'width': objPosition.width, 'height': objPosition.height};
+};
 
 // Get mouse event position in DOM element
-Util.getEventPosition = function (e, obj, scale) {
+Util.getEventPosition = function(e, obj, scale) {
     "use strict";
     var evt, docX, docY, pos;
     //if (!e) evt = window.event;
@@ -528,9 +462,8 @@ Util.getEventPosition = function (e, obj, scale) {
     return {'x': x / scale, 'y': y / scale, 'realx': realx / scale, 'realy': realy / scale};
 };
 
-
 // Event registration. Based on: http://www.scottandrew.com/weblog/articles/cbs-events
-Util.addEvent = function (obj, evType, fn) {
+Util.addEvent = function(obj, evType, fn) {
     "use strict";
     if (obj.attachEvent) {
         var r = obj.attachEvent("on" + evType, fn);
@@ -543,7 +476,7 @@ Util.addEvent = function (obj, evType, fn) {
     }
 };
 
-Util.removeEvent = function (obj, evType, fn) {
+Util.removeEvent = function(obj, evType, fn) {
     "use strict";
     if (obj.detachEvent) {
         var r = obj.detachEvent("on" + evType, fn);
@@ -556,28 +489,27 @@ Util.removeEvent = function (obj, evType, fn) {
     }
 };
 
-Util.stopEvent = function (e) {
+Util.stopEvent = function(e) {
     "use strict";
     if (e.stopPropagation) { e.stopPropagation(); }
-    else                   { e.cancelBubble = true; }
+    else { e.cancelBubble = true; }
 
     if (e.preventDefault)  { e.preventDefault(); }
-    else                   { e.returnValue = false; }
+    else { e.returnValue = false; }
 };
-
 
 // Set browser engine versions. Based on mootools.
 Util.Features = {xpath: !!(document.evaluate), air: !!(window.runtime), query: !!(document.querySelector)};
 
-(function () {
+(function() {
     "use strict";
     // 'presto': (function () { return (!window.opera) ? false : true; }()),
-    var detectPresto = function () {
+    var detectPresto = function() {
         return !!window.opera;
     };
 
     // 'trident': (function () { return (!window.ActiveXObject) ? false : ((window.XMLHttpRequest) ? ((document.querySelectorAll) ? 6 : 5) : 4);
-    var detectTrident = function () {
+    var detectTrident = function() {
         if (!window.ActiveXObject) {
             return false;
         } else {
@@ -590,7 +522,7 @@ Util.Features = {xpath: !!(document.evaluate), air: !!(window.runtime), query: !
     };
 
     // 'webkit': (function () { try { return (navigator.taintEnabled) ? false : ((Util.Features.xpath) ? ((Util.Features.query) ? 525 : 420) : 419); } catch (e) { return false; } }()),
-    var detectInitialWebkit = function () {
+    var detectInitialWebkit = function() {
         try {
             if (navigator.taintEnabled) {
                 return false;
@@ -606,14 +538,14 @@ Util.Features = {xpath: !!(document.evaluate), air: !!(window.runtime), query: !
         }
     };
 
-    var detectActualWebkit = function (initial_ver) {
+    var detectActualWebkit = function(initial_ver) {
         var re = /WebKit\/([0-9\.]*) /;
         var str_ver = (navigator.userAgent.match(re) || ['', initial_ver])[1];
         return parseFloat(str_ver, 10);
     };
 
     // 'gecko': (function () { return (!document.getBoxObjectFor && window.mozInnerScreenX == null) ? false : ((document.getElementsByClassName) ? 19ssName) ? 19 : 18 : 18); }())
-    var detectGecko = function () {
+    var detectGecko = function() {
         /* jshint -W041 */
         if (!document.getBoxObjectFor && window.mozInnerScreenX == null) {
             return false;
@@ -639,7 +571,7 @@ Util.Features = {xpath: !!(document.evaluate), air: !!(window.runtime), query: !
     }
 })();
 
-Util.Flash = (function () {
+Util.Flash = (function() {
     "use strict";
     var v, version;
     try {
