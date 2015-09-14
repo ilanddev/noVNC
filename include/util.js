@@ -457,9 +457,9 @@ Util.getEventPosition = function(e, obj, scale) {
     }
     var realx = docX - pos.x;
     var realy = docY - pos.y;
-    var x = Math.max(Math.min(realx, obj.width - 1), 0);
-    var y = Math.max(Math.min(realy, obj.height - 1), 0);
-    return {'x': x / scale, 'y': y / scale, 'realx': realx / scale, 'realy': realy / scale};
+    var x = Math.max(Math.min(realx / scale, obj.width - 1), 0);
+    var y = Math.max(Math.min(realy / scale, obj.height - 1), 0);
+    return {'x': x, 'y': y, 'realx': realx / scale, 'realy': realy / scale};
 };
 
 // Event registration. Based on: http://www.scottandrew.com/weblog/articles/cbs-events
